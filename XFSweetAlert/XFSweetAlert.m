@@ -408,6 +408,14 @@ static BOOL shouldNotAnimate = NO;
 
 @implementation XFSweetAlert
 
+#pragma mark - Initialize Methods
+
++ (instancetype)sweetAlert {
+    XFSweetAlert *alert = [XFSweetAlert new];
+    
+    return alert;
+}
+
 - (instancetype)init {
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
@@ -435,30 +443,6 @@ static BOOL shouldNotAnimate = NO;
         }
     }
     [self resizeAndRelayout];
-}
-
-+ (instancetype)sweetAlert {
-    XFSweetAlert *alert = [XFSweetAlert new];
-    
-    return alert;
-}
-
-- (XFSweetAlert *(^)(NSString *))subTitle {
-    return ^id(NSString *subTitle) {
-        self.xf_subTitle = subTitle;
-        return self;
-    };
-}
-
-- (XFSweetAlert *(^)(XFAlertStyle))style {
-    return ^id(XFAlertStyle style) {
-        self.xf_style = style;
-        return self;
-    };
-}
-
-- (void)pressed:(UIButton *)sender {
-    [self closeAlert:sender.tag];
 }
 
 #pragma mark - Private
@@ -560,6 +544,10 @@ static BOOL shouldNotAnimate = NO;
     }
     
     _contentView.frame = CGRectMake((mainScreenBounds.size.width-kContentWidth)/2.0, (mainScreenBounds.size.height-y)/2.0, kContentWidth, y);
+}
+
+- (void)pressed:(UIButton *)sender {
+    [self closeAlert:sender.tag];
 }
 
 - (void)closeAlert:(NSUInteger)buttonIndex {

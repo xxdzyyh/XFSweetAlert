@@ -17,14 +17,8 @@ typedef NS_ENUM(NSUInteger,XFAlertStyle) {
 };
 
 @interface XFSweetAlert : UIViewController
-
-@property (copy  , nonatomic) NSString *xf_subTitle;
-@property (copy  , nonatomic) NSString *xf_title;
-@property (assign, nonatomic) XFAlertStyle xf_style;
+ 
 @property (strong, nonatomic) void(^useAction)(BOOL isOtherButton);
-
-- (XFSweetAlert *(^)(NSString *))subTitle;
-- (XFSweetAlert *(^)(XFAlertStyle))style;
 
 + (instancetype)sweetAlert;
 
