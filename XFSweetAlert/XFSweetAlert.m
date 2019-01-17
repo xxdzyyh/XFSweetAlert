@@ -564,7 +564,7 @@ static BOOL shouldNotAnimate = NO;
 
 - (void)closeAlert:(NSUInteger)buttonIndex {
     if (self.useAction != nil) {
-        BOOL isOtherButton = (buttonIndex == 0 ? true : false);
+        BOOL isOtherButton = (buttonIndex == 1 ? true : false);
         
         shouldNotAnimate = YES;
         _useAction(isOtherButton);
