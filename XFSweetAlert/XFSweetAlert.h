@@ -18,22 +18,18 @@ typedef NS_ENUM(NSUInteger,XFAlertStyle) {
 
 @interface XFSweetAlert : UIViewController
  
-@property (strong, nonatomic) void(^useAction)(BOOL isOtherButton);
-
-+ (instancetype)sweetAlert;
-
-- (void)showAlertWithTitle:(NSString *)title
++ (void)showAlertWithTitle:(NSString *)title
                   subTitle:(NSString *)subTitle
                      style:(XFAlertStyle)style;
 
-- (void)showAlertWithTitle:(NSString *)title
++ (void)showAlertWithTitle:(NSString *)title
                   subTitle:(NSString *)subTitle
                      style:(XFAlertStyle)style 
                buttonTitle:(NSString *)buttonTitle
           otherButtonTitle:(NSString *)otherButtonTitle
                     action:(void(^)(BOOL isOtherButton))action;
 
-- (void)showAlertWithTitle:(NSString *)title
++ (void)showAlertWithTitle:(NSString *)title
                   subTitle:(NSString *)subTitle
                      style:(XFAlertStyle)style 
                buttonTitle:(NSString *)buttonTitle

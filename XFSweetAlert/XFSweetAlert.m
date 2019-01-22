@@ -137,7 +137,6 @@
     return path;
 }
 
-
 @end
 
 @interface SuccessAnimatedView : AnimatabelView
@@ -152,14 +151,55 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        _outlineLayer = [CAShapeLayer layer];
+        _circleLayer = [CAShapeLayer layer];
+        
         [self setupLayers];
     }
     return self;
 }
 
-- (void)setupLayers {
-    _outlineLayer = [CAShapeLayer layer];
+- (void)layoutSubviews {
+    [super layoutSubviews];
     
+    [self setupLayers];
+}
+
+- (UIBezierPath *)outlineCircle {
+    UIBezierPath *path = [UIBezierPath new];
+    
+    CGFloat startAngle = 0.0/180.0*M_PI;
+    CGFloat endAngle = 360.0/180.0*M_PI;
+    CGFloat width = self.frame.size.width;
+    
+    [path addArcWithCenter:CGPointMake(width/2.0, self.frame.size.height/2.0) 
+                    radius:width/2.0 
+                startAngle:startAngle 
+                  endAngle:endAngle 
+                 clockwise:false];    
+    return path;
+}
+
+- (UIBezierPath *)path {
+    UIBezierPath *path = [UIBezierPath new];
+    
+    CGFloat startAngle = 60.0/180.0*M_PI;
+    CGFloat endAngle = 200.0/180.0*M_PI;
+    CGFloat width = self.frame.size.width;
+    
+    [path addArcWithCenter:CGPointMake(width/2.0, self.frame.size.height/2.0) 
+                    radius:width/2.0 
+                startAngle:startAngle 
+                  endAngle:endAngle 
+                 clockwise:false];
+    
+    [path addLineToPoint:CGPointMake(36.0-10.0, 60.0-10.0)];
+    [path addLineToPoint:CGPointMake(85.0-20.0, 30.0-20.0)];
+    
+    return path;
+}
+
+- (void)setupLayers {
     _outlineLayer.position = CGPointMake(0, 0);
     _outlineLayer.path =  [self outlineCircle].CGPath;
     _outlineLayer.fillColor = [UIColor clearColor].CGColor;
@@ -169,8 +209,6 @@
     _outlineLayer.opacity = 0.1;
     
     [self.layer addSublayer:_outlineLayer];
-    
-    _circleLayer = [CAShapeLayer layer];
     
     _circleLayer.position = CGPointMake(0, 0);
     _circleLayer.path = [self path].CGPath;
@@ -213,52 +251,6 @@
     [self.circleLayer addAnimation:strokeStart forKey:@"strokeStart"];
 }
 
-- (UIBezierPath *)outlineCircle {
-    UIBezierPath *path = [UIBezierPath new];
-    
-    CGFloat startAngle = 0/180.0*M_PI;
-    CGFloat endAngle = 360/180.0*M_PI;
-    CGFloat width = self.frame.size.width;
-    
-    [path addArcWithCenter:CGPointMake(width/2.0, width/2.0) 
-                    radius:width/2.0 
-                startAngle:startAngle 
-                  endAngle:endAngle 
-                 clockwise:false];
-    
-    CGFloat factor = self.frame.size.width/1.5;
-    
-    [path moveToPoint:CGPointMake(width/2.0, 15.0)];
-    [path addLineToPoint:CGPointMake(width/2.0, factor)];
-    [path moveToPoint:CGPointMake(width/2.0, factor+10.0)];
-    [path addArcWithCenter:CGPointMake(width/2.0, factor+10.0)
-                    radius:1.0
-                startAngle:startAngle 
-                  endAngle:endAngle 
-                 clockwise:true];
-    
-    return path;
-}
-
-- (UIBezierPath *)path {
-    UIBezierPath *path = [UIBezierPath new];
-    
-    CGFloat startAngle = 60/180.0*M_PI;
-    CGFloat endAngle = 200/180.0*M_PI;
-    CGFloat width = self.frame.size.width;
-    
-    [path addArcWithCenter:CGPointMake(width/2.0, width/2.0) 
-                    radius:width/2.0 
-                startAngle:startAngle 
-                  endAngle:endAngle 
-                 clockwise:false];
-    
-    [path addLineToPoint:CGPointMake(36.0-10.0, 60.0-10.0)];
-    [path addLineToPoint:CGPointMake(85.0-20.0, 30.0-20.0)];
-    
-    return path;
-}
-
 @end
 
 @interface CancelAnimatedView : AnimatabelView
@@ -273,14 +265,22 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        _circleLayer = [CAShapeLayer layer];
+        _crossPathLayer = [CAShapeLayer layer];
+        
         [self setupLayers];
     }
     return self;
 }
 
-- (void)setupLayers {
-    _circleLayer = [CAShapeLayer layer];
+- (void)layoutSubviews {
+    [super layoutSubviews];
     
+    [self setupLayers];
+}
+
+- (void)setupLayers {
+
     _circleLayer.path = [self outlineCircle].CGPath;
     _circleLayer.fillColor = [UIColor clearColor].CGColor;
     _circleLayer.strokeColor = [UIColor colorFromRGB:0xF27474].CGColor;
@@ -291,8 +291,6 @@
 
     [self.layer addSublayer:_circleLayer];
     
-    _crossPathLayer = [CAShapeLayer layer];
-
     _crossPathLayer.path =  [self crossPath].CGPath;
     _crossPathLayer.fillColor = [UIColor clearColor].CGColor;
     _crossPathLayer.strokeColor = [UIColor colorFromRGB:0xF27474].CGColor;
@@ -404,6 +402,8 @@ static BOOL shouldNotAnimate = NO;
 @property (assign, nonatomic) CGFloat textViewHeight;
 @property (strong, nonatomic) XFSweetAlert *strongSelf;
 
+@property (strong, nonatomic) void(^useAction)(BOOL isOtherButton);
+
 @end
 
 @implementation XFSweetAlert
@@ -443,6 +443,10 @@ static BOOL shouldNotAnimate = NO;
         }
     }
     [self resizeAndRelayout];
+}
+
+- (void)dealloc {
+    NSLog(@"XFSweetAlert dealloc");
 }
 
 #pragma mark - Private
@@ -609,6 +613,44 @@ static BOOL shouldNotAnimate = NO;
 }
 
 #pragma mark - Public
+
++ (void)showAlertWithTitle:(NSString *)title 
+                  subTitle:(NSString *)subTitle 
+                     style:(XFAlertStyle)style {
+    [[XFSweetAlert sweetAlert] showAlertWithTitle:title subTitle:subTitle style:style];
+}
+
++ (void)showAlertWithTitle:(NSString *)title
+                  subTitle:(NSString *)subTitle
+                     style:(XFAlertStyle)style 
+               buttonTitle:(NSString *)buttonTitle
+          otherButtonTitle:(NSString *)otherButtonTitle
+                    action:(void(^)(BOOL isOtherButton))action {
+    [[XFSweetAlert sweetAlert] showAlertWithTitle:title
+                                         subTitle:subTitle 
+                                            style:style 
+                                      buttonTitle:buttonTitle 
+                                 otherButtonTitle:otherButtonTitle 
+                                           action:action];
+}
+
++ (void)showAlertWithTitle:(NSString *)title
+                  subTitle:(NSString *)subTitle
+                     style:(XFAlertStyle)style 
+               buttonTitle:(NSString *)buttonTitle
+               buttonColor:(UIColor *)buttonColor
+          otherButtonTitle:(NSString *)otherButtonTitle
+          otherButtonColor:(UIColor *)otherButtonColor
+                    action:(void(^)(BOOL isOtherButton))action {
+    [[XFSweetAlert sweetAlert] showAlertWithTitle:title
+                                         subTitle:subTitle 
+                                            style:style 
+                                      buttonTitle:buttonTitle 
+                                      buttonColor:buttonColor
+                                 otherButtonTitle:otherButtonTitle 
+                                 otherButtonColor:otherButtonColor
+                                           action:action];
+}
 
 - (void)showAlertWithTitle:(NSString *)title
                   subTitle:(NSString *)subTitle
