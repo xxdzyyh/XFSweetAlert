@@ -18,6 +18,7 @@
 		D4CEB7162266C7D2007E4B55 /* SweetAlert.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4CEB70F2266C7D2007E4B55 /* SweetAlert.framework */; };
 		D4CEB7172266C7D2007E4B55 /* SweetAlert.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D4CEB70F2266C7D2007E4B55 /* SweetAlert.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D4CEB71D2266C7E4007E4B55 /* XFSweetAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = D442903D21D20D160094ADAB /* XFSweetAlert.m */; };
+		D4CEB7252266D2A7007E4B55 /* XFSweetAlert.h in Headers */ = {isa = PBXBuildFile; fileRef = D442903C21D20D160094ADAB /* XFSweetAlert.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,6 +134,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4CEB7252266D2A7007E4B55 /* XFSweetAlert.h in Headers */,
 				D4CEB7132266C7D2007E4B55 /* SweetAlert.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
